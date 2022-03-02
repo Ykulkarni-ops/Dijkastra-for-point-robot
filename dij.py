@@ -30,7 +30,7 @@ class Node(object):
         return self.position == other.position
 
     #check if the clearnce is valid 
-    def validClearnace(self, currRow, currColumn):
+    def validClearance(self, currRow, currColumn):
         sum = self.clearance + self.radius
         return (currRow >= (1+ sum) and currRow <=(200 - sum ) and currColumn >= (1+ sum) and currColumn <= (300 - sum))
 
@@ -92,4 +92,84 @@ class Node(object):
             d6 = 0
             d7 = 0
 
+        #defining the actions for Dijkastra
+
+        #action to move up 
+        def moveUp(self, currRow, currCol):
+            if(self.validClearance(currRow - 1, currCol) and self.obstacle(currRow -1 , currCol) == False):
+                self.x = 0
+                self.y = 1
+                self.cost = 1
+                return True 
+            else: 
+                return False
+
+        #action to move down
+        def moveDown(self, currRow, currCol):
+            if(self.validClearance(currRow, currCol - 1) and self.obstacle( currRow, currCol -1) == False):
+                self.x = 0
+                self.y = -1
+                self.cost = 1
+                return True
+            else:
+                return False
+
+        #action to move right 
+        def moveRight(self, currRow, currCol):
+            if(self.validClearance(currRow + 1, currCol) and self.obstacle( currRow + 1, currCol) == False):
+                self.x = 1
+                self.y = 0
+                self.cost = 1
+                return True
+            else:
+                return False
         
+        #action to move left
+        def moveLeft(self, currRow, currCol):
+            if(self.validClearance(currRow - 1, currCol) and self.obstacle( currRow - 1, currCol) == False):
+                self.x = -1
+                self.y = 0
+                self.cost = 1
+                return True
+            else:
+                return False
+
+        #action to move up right 
+        def moveUpRight(self, currRow, currCol):
+            if(self.validClearance(currRow + 1, currCol + 1) and self.obstacle( currRow + 1, currCol + 1) == False):
+                self.x = 1
+                self.y = 1
+                self.cost = np.sqrt(2)
+                return True
+            else:
+                return False
+
+        #action to move up left 
+        def moveUpLeft(self, currRow, currCol):
+            if(self.validClearance(currRow - 1, currCol + 1) and self.obstacle( currRow - 1, currCol + 1) == False):
+                self.x = -1
+                self.y = +1
+                self.cost = np.sqrt(2)
+                return True
+            else:
+                return False
+
+        #action to move down right 
+        def moveDownRight(self, currRow, currCol):
+            if(self.validClearance(currRow + 1, currCol - 1) and self.obstacle( currRow + 1, currCol - 1) == False):
+                self.x = 1
+                self.y = -1
+                self.cost = np.sqrt(2)
+                return True
+            else:
+                return False
+
+        #action to move down left 
+        def moveDownLeft(self, currRow, currCol):
+            if(self.validClearance(currRow - 1, currCol - 1) and self.obstacle( currRow - 1, currCol - 1) == False):
+                self.x = -1
+                self.y = -1
+                self.cost = np.sqrt(2)
+                return True
+            else:
+                return False

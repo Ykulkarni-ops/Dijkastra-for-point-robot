@@ -1,3 +1,4 @@
+from cmath import sqrt
 from locale import DAY_2
 import numpy as np
 import cv2
@@ -33,4 +34,62 @@ class Node(object):
         sum = self.clearance + self.radius
         return (currRow >= (1+ sum) and currRow <=(200 - sum ) and currColumn >= (1+ sum) and currColumn <= (300 - sum))
 
-    
+    #define the obstacles
+    def obstacle(self, row, col):
+        sum = self.clearance + self.radius
+        sqrt_rc = 1.414 * sum
+
+        #define circle
+        d1 = ((row - 150) * (row - 150) + (col - 225) * (col - 225) - ((25 - sum) * 25 - sum))
+
+        #define polygon
+
+        (x1, y1) = (120 - (2.62 * sum ), 20 - (1.205 *sum))
+        (x2, y2) = (150 - sqrt_rc, 50 )
+        (x3, y3) = (185 + sum, 25 - (sum * 0.924))
+        first = ((col - y1) * (x2 - x1)) - ((y2 - y1) * (row -x1))
+        second = ((col - y2) * (x3 - x2)) - ((y3 - y2) * (row - x2))
+        third = ((col -y3) * (x1 -x3)) - ((y1 - y3) * (row - x3))
+        d2 = 1
+        if (first <= 0 and second <=  0 and third  <= 0):
+            d2 = 0 
+        (x1, y1) = (150 - sqrt_rc , 50)
+        (x2, y2) = (185 + sum, 25 - (sum * 0.924))
+        (x3, y3) = (185 + sum, 75 - (sum * 0.514))
+        first = ((col - y1) * (x2 - x1)) - ((y2 - y1) * (row -x1))
+        second = ((col - y2) * (x3 - x2)) - ((y3 - y2) * (row - x2))
+        third = ((col -y3) * (x1 -x3)) - ((y1 - y3) * (row - x3))
+        d3 = 1
+        if ( first >= 0 and second >= 0 and third >= 0):
+            d3 = 0
+        (x1, y1) = (10 - sqrt_rc, 50)
+        (x2, y2) = (25, 200 - sqrt_rc)
+        (x3, y3) = (40 + sqrt_rc, 225)
+        (x4, y4) = (25, 250 + sqrt_rc)
+        first = ((col - y1) * (x2 - x1)) - ((y2 - y1) * (row -x1))
+        second = ((col - y2) * (x3 - x2)) - ((y3 - y2) * (row - x2))
+        third = ((col -y3) * (x4 -x3)) - ((y3 - y4) * (row - x3))
+        fourth = ((col -y4) * (x1 -x4)) - ((y1 - y4) * (row - x4))
+        d4 = 1
+        d5 = 1
+        if (first <= 0 and second <= 0 and third <= 0 and fourth <=0):
+            d4 = 0
+            d5 = 0
+
+        #define square 
+
+        (x1, y1) = ( 150 - sqrt_rc , 30)
+        (x2, y2) = ( 120 - sqrt_rc , 50)
+        (x3, y3) = ( 150, 80 + sqrt_rc)
+        (x4, y4) = ( 185 + sum , 75 + (sum * 0.514))
+        first = ((col - y1) * (x2 - x1)) - ((y2 - y1) * (row -x1))
+        second = ((col - y2) * (x3 - x2)) - ((y3 - y2) * (row - x2))
+        third = ((col -y3) * (x4 -x3)) - ((y3 - y4) * (row - x3))
+        fourth = ((col -y4) * (x1 -x4)) - ((y1 - y4) * (row - x4))
+        d6 = 1 
+        d7 = 1
+        if (first <= 0 and second <= 0 and third <= 0 and fourth <=0):
+            d6 = 0
+            d7 = 0
+
+        

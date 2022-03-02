@@ -173,3 +173,13 @@ class Node(object):
                 return True
             else:
                 return False
+
+        #check if goal is reached
+        def goalReached(self, currRow, currCol):
+            if(currRow == self.goal[0] and currCol == self.goal[1]):
+                print("GOAL REACHED !!!!!")
+                return True
+            else:
+                return False
+
+        

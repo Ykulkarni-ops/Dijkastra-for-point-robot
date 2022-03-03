@@ -39,10 +39,10 @@ class Node(object):
         sum = self.clearance + self.radius
         sqrt_rc = 1.414 * sum
 
-        #define circle
+        #check  circle
         d1 = ((row - 150) * (row - 150) + (col - 225) * (col - 225) - ((25 - sum) * 25 - sum))
 
-        #define polygon
+        #check polygon
 
         (x1, y1) = (120 - (2.62 * sum ), 20 - (1.205 *sum))
         (x2, y2) = (150 - sqrt_rc, 50 )
@@ -76,7 +76,7 @@ class Node(object):
             d4 = 0
             d5 = 0
 
-        #define square 
+        #check square 
 
         (x1, y1) = ( 150 - sqrt_rc , 30)
         (x2, y2) = ( 120 - sqrt_rc , 50)
@@ -182,4 +182,160 @@ class Node(object):
             else:
                 return False
 
-        
+        #Dijkastra algorithm
+        def dijAlgo(self):
+            costMap = {}
+            visited_nodes = {}
+            path = {}
+
+            for row in np.arange(1, self.numRows + 1 ,1):
+                for col in np.arange(1, self.numCols + 1, 1):
+                    costMap[(row,col)] = float('inf')
+                    visited_nodes[(row,col)] = False
+                    path[(row,col)] = -1
+
+            #define two lists one for explored nodes and other for queue
+
+            explored_nodes = []
+            queue = []
+
+            heappush(queue, (0, self.start))
+            costMap[self.start] = 0
+
+            while(len(queue) > 0):
+                heapify(queue)
+                _, currNode = heappop(queue)
+                visited_nodes[currNode] = True
+                explored_nodes.append(currNode)
+
+                # if goal is reached break the loop
+                if(self.goalReached(currNode[0],currNode[1]) == True):
+                    break
+
+                # move up and check the cost of next node and compare it update the cost for current node
+                # with the minimum cost obtained after comparison.    
+                if(self.moveUp(currNode[0],currNode[1] and visited_nodes[(currNode[0] + self.x , currNode[1] + self.y)] == False 
+                    and costMap[(currNode[0] + self.x, currNode[1] + self.y)] > costMap[currNode] + self.cost )):
+
+                    costMap[(currNode[0] + self.x, currNode[1] + self.y)] = costMap[(currNode) + self.cost]
+                    path[(currNode[0] + self.x, currNode[1] + self.y)] = currNode
+                    heappush(queue, (costMap[(currNode[0] + self.x , currNode[1] + self.y)], (currNode[0] + self.x , currNode[1] + self.y)))
+
+                
+                # move down and check the cost of next node and compare it update the cost for current node
+                # with the minimum cost obtained after comparison.
+                if(self.moveDown(currNode[0],currNode[1] and visited_nodes[(currNode[0] + self.x , currNode[1] + self.y)] == False 
+                    and costMap[(currNode[0] + self.x, currNode[1] + self.y)] > costMap[currNode] + self.cost )):
+
+                    costMap[(currNode[0] + self.x, currNode[1] + self.y)] = costMap[(currNode) + self.cost]
+                    path[(currNode[0] + self.x, currNode[1] + self.y)] = currNode
+                    heappush(queue, (costMap[(currNode[0] + self.x , currNode[1] + self.y)], (currNode[0] + self.x , currNode[1] + self.y)))
+
+                
+                # move right and check the cost of next node and compare it update the cost for current node
+                # with the minimum cost obtained after comparison.    
+                if(self.moveRight(currNode[0],currNode[1] and visited_nodes[(currNode[0] + self.x , currNode[1] + self.y)] == False 
+                    and costMap[(currNode[0] + self.x, currNode[1] + self.y)] > costMap[currNode] + self.cost )):
+
+                    costMap[(currNode[0] + self.x, currNode[1] + self.y)] = costMap[(currNode) + self.cost]
+                    path[(currNode[0] + self.x, currNode[1] + self.y)] = currNode
+                    heappush(queue, (costMap[(currNode[0] + self.x , currNode[1] + self.y)], (currNode[0] + self.x , currNode[1] + self.y)))
+
+
+                # move left and check the cost of next node and compare it update the cost for current node
+                # with the minimum cost obtained after comparison.    
+                if(self.moveLeft(currNode[0],currNode[1] and visited_nodes[(currNode[0] + self.x , currNode[1] + self.y)] == False 
+                    and costMap[(currNode[0] + self.x, currNode[1] + self.y)] > costMap[currNode] + self.cost )):
+
+                    costMap[(currNode[0] + self.x, currNode[1] + self.y)] = costMap[(currNode) + self.cost]
+                    path[(currNode[0] + self.x, currNode[1] + self.y)] = currNode
+                    heappush(queue, (costMap[(currNode[0] + self.x , currNode[1] + self.y)], (currNode[0] + self.x , currNode[1] + self.y)))
+
+
+                # move up right  and check the cost of next node and compare it update the cost for current node
+                # with the minimum cost obtained after comparison.    
+                if(self.moveUpRight(currNode[0],currNode[1] and visited_nodes[(currNode[0] + self.x , currNode[1] + self.y)] == False 
+                    and costMap[(currNode[0] + self.x, currNode[1] + self.y)] > costMap[currNode] + self.cost )):
+
+                    costMap[(currNode[0] + self.x, currNode[1] + self.y)] = costMap[(currNode) + self.cost]
+                    path[(currNode[0] + self.x, currNode[1] + self.y)] = currNode
+                    heappush(queue, (costMap[(currNode[0] + self.x , currNode[1] + self.y)], (currNode[0] + self.x , currNode[1] + self.y)))
+
+
+                # move up Left and check the cost of next node and compare it update the cost for current node
+                # with the minimum cost obtained after comparison.    
+                if(self.moveUpLeft(currNode[0],currNode[1] and visited_nodes[(currNode[0] + self.x , currNode[1] + self.y)] == False 
+                    and costMap[(currNode[0] + self.x, currNode[1] + self.y)] > costMap[currNode] + self.cost )):
+
+                    costMap[(currNode[0] + self.x, currNode[1] + self.y)] = costMap[(currNode) + self.cost]
+                    path[(currNode[0] + self.x, currNode[1] + self.y)] = currNode
+                    heappush(queue, (costMap[(currNode[0] + self.x , currNode[1] + self.y)], (currNode[0] + self.x , currNode[1] + self.y)))
+
+                
+                # move down right and check the cost of next node and compare it update the cost for current node
+                # with the minimum cost obtained after comparison.    
+                if(self.moveDownRight(currNode[0],currNode[1] and visited_nodes[(currNode[0] + self.x , currNode[1] + self.y)] == False 
+                    and costMap[(currNode[0] + self.x, currNode[1] + self.y)] > costMap[currNode] + self.cost )):
+
+                    costMap[(currNode[0] + self.x, currNode[1] + self.y)] = costMap[(currNode) + self.cost]
+                    path[(currNode[0] + self.x, currNode[1] + self.y)] = currNode
+                    heappush(queue, (costMap[(currNode[0] + self.x , currNode[1] + self.y)], (currNode[0] + self.x , currNode[1] + self.y)))
+
+                
+                # move down Left and check the cost of next node and compare it update the cost for current node
+                # with the minimum cost obtained after comparison.    
+                if(self.moveDownLeft(currNode[0],currNode[1] and visited_nodes[(currNode[0] + self.x , currNode[1] + self.y)] == False 
+                    and costMap[(currNode[0] + self.x, currNode[1] + self.y)] > costMap[currNode] + self.cost )):
+
+                    costMap[(currNode[0] + self.x, currNode[1] + self.y)] = costMap[(currNode) + self.cost]
+                    path[(currNode[0] + self.x, currNode[1] + self.y)] = currNode
+                    heappush(queue, (costMap[(currNode[0] + self.x , currNode[1] + self.y)], (currNode[0] + self.x , currNode[1] + self.y)))
+
+            
+            #define a list to check if path exits 
+            check = []
+
+            #define variables for goal 
+            goalx = self.goal[0]
+            goaly = self.goal[1]
+
+            #update the check list if the path exits 
+            for a in np.arange(goalx - 1, goaly + 1, 1):
+                for b in np.arange(goalx - 1, goaly + 1 , 1 ):
+                    check.append(costMap[a,b])
+
+            #if the path exists print path exits if not then print path does not exist
+
+            dummy_cost = float('inf')
+            for c in range(len(check)):
+                if (check[c] != dummy_cost):
+                    print ("PATH EXISTS !!!")
+                
+                noPath = 1
+                break 
+            
+            if (noPath == 0):
+                print("PATH DOES NOT EXITST !!!")
+                return(explored_nodes , [], costMap[goalx, goaly])
+
+            print(costMap[goalx, goaly], "Shortest path")
+            result = (goalx, goaly)
+
+
+            #back tracking
+
+            #initialize list for backtrack
+            backtrack = []
+            node = result
+
+            while(path[node] != -1):
+                backtrack.append(node)
+                node = path[node]
+
+            backtrack.append(self.start)
+            backtrack = list(reversed(backtrack))
+            print(backtrack)
+            return (explored_nodes, backtrack, costMap[goalx, goaly])
+
+
+        def animation(self, explored_nodes, backtrack, path):

@@ -337,5 +337,38 @@ class Node(object):
             print(backtrack)
             return (explored_nodes, backtrack, costMap[goalx, goaly])
 
-
+        # visualization 
         def animation(self, explored_nodes, backtrack, path):
+            fourcc = cv2.VideoWriter_fourcc(*'XVID')
+            out = cv2.VideoWriter(str(path), fourcc, 20.0, (self.numCols, self.numRows))
+            image = np.zeros((self.numRows, self.numCols, 3), dtype = np.uint8)
+            count = 0
+            for state in explored_nodes:
+                image[int(self.numRows - state[0]), int(state[1] - 1)] = (255, 125, 0)
+                if(count %75 == 0):
+                    out.write(image)
+                count += 1
+                cv2.imshow('explored', image)
+            
+            count = 0 
+            for row in range(1,self.numRows + 1):
+                for col in range(1, self.numCols + 1):
+                    if(image[int(self.numRows - row), int(col - 1), 0] == 0 and image[int(self.numRows - row), int(col - 1) , 1] == 0
+                    and image[int(self.numRows - row), int(col - 1), 2] == 0):
+                        if(self.validClearance(row,col) and self.obstacle(row,col) == False):
+                            image[int(self.numRows - row), int(col - 1)] = (100,0,0)
+                            if (count % 75 == 0):
+                                out.write(image)
+                            count += 1
+
+            if(len(backtrack) > 0):
+                for state in backtrack:
+                    image[int(self.numRows - state[0]), int(state[1] - 1)] = (0,0,255)
+                    out.write(image)
+                    cv2.imshow('Result', image)
+                    cv2.waitKey(5)
+
+            cv2.waitKey(0)
+            cv2.destroyAllWindows()
+
+            

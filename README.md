@@ -32,6 +32,8 @@ To run the code :
 	1. Make sure that both the files dij.py and dijkastra.py are in same folder
 	2. Open terminal in the code folder
 	3. Type python dij.py or python3 dij.py
+- The blue part indicates the explored nodes 
+- the green part indicates the unexplored nodes
 
 To view results:
 - After the program is run the file dijkastraalgo.avi will be generated
@@ -43,7 +45,7 @@ To view results:
 
 ![Result](https://github.com/Ykulkarni-ops/Dijkastra-for-point-robot/blob/main/results/result.JPG)
 
-![Video](https://github.com/Ykulkarni-ops/Dijkastra-for-point-robot/blob/main/results/dijkstraalgo.avi)
+![Path tracking](https://github.com/Ykulkarni-ops/Dijkastra-for-point-robot/blob/main/results/pathtracking.gif)
 
 ## AUTHOR
 [Yash Kulkarni](https://github.com/Ykulkarni-ops)

@@ -17,7 +17,7 @@ The first thing to do is cloning the github repository into your PC
 
 - open the windows terminal/ linux shell into the desired location 
 - type the command 'git clone https://github.com/Ykulkarni-ops/Dijkastra-for-point-robot.git'
-- press <enter>
+- press '<enter>'
 - this will clone the repository in your pc
 
 

@@ -1,6 +1,7 @@
 from dijkastra import *
 import sys
 
+#get the user input for start and goal nodes , radius and clearance for the point robot
 print("The start and end coordinates should lie between 200 x 300 area.")
 startRow = int(input("Enter the x-coordinate for start node: "))
 startCol = int(input("Enter the y-coordinate for start node: "))
@@ -9,6 +10,7 @@ goalCol = int(input("Enter the y-coordinate for goal node: "))
 radius = int(input("Enter the radius for the robot : "))
 clearance = int(input("Enter the clearance for the robot : "))
 
+#sample test case
 '''
 startRow = 10
 startCol = 10
@@ -22,6 +24,7 @@ start = (startRow, startCol)
 goal = (goalRow, goalCol)
 dij = Node(start, goal, None, clearance, radius)
 
+#check various conditions and run the loop
 if(dij.validClearance(start[0], start[1])):
     if(dij.validClearance(goal[0], goal[1])):
         if(dij.obstacle(start[0],start[1]) == False):

@@ -1,11 +1,15 @@
+#create the environment by importing necessary libraries
 import numpy as np
 import math
 from collections import defaultdict
 from heapq import *
 import cv2
 
+
+#create the class Node 
 class Node(object):
 
+	#initialize the variables for start, goalm clearance, radius and position
 	def __init__(self, start, goal, position , clearance , radius ):
 		self.start = start
 		self.goal = goal
@@ -18,14 +22,16 @@ class Node(object):
 		self.numRows = 250
 		self.numCols = 400
 
+	# define the position for point robot	
 	def __eq__(self, other):
 		return self.position == other.position
 
+	# check if the clearance for the point robot is valid
 	def validClearance(self, currRow, currCol):
 		sum = self.clearance + self.radius
 		return (currRow >= (1 + sum) and currRow <= (250 - sum) and currCol >= (1 + sum) and currCol <= (400 - sum))
 
-
+	#check the obstacle space and plot it 
 	def obstacle(self, row, col):
 		sum = self.clearance + self.radius
 		sqrt_rc = 1.4142 * sum
@@ -101,6 +107,7 @@ class Node(object):
 			return True
 		return False
 
+	# action to move up and check the cost between the new node and existing node and update the cost after comparison
 	def moveUp(self, currRow, currCol):
 		if(self.validClearance(currRow - 1, currCol) and self.obstacle(currRow - 1, currCol) == False):
 			self.x = 0
@@ -109,7 +116,7 @@ class Node(object):
 			return True
 		else:
 			return False
-
+	# action to move Down and check the cost between the new node and existing node and update the cost after comparison
 	def moveDown(self, currRow, currCol):
 		if(self.validClearance(currRow, currCol - 1) and self.obstacle(currRow, currCol - 1) == False):
 			self.x = 0 
@@ -119,6 +126,7 @@ class Node(object):
 		else:
 			return False
 
+    # action to move right and check the cost between the new node and existing node and update the cost after comparison
 	def moveRight(self, currRow, currCol):
 		if(self.validClearance(currRow+1, currCol) and self.obstacle(currRow +1, currCol) == False):
 			self.x = 1 
@@ -128,7 +136,7 @@ class Node(object):
 		else:
 			return False
 
-	
+	# action to move left and check the cost between the new node and existing node and update the cost after comparison
 	def moveLeft(self, currRow, currCol):
 		if(self.validClearance(currRow - 1, currCol) and self.obstacle(currRow - 1, currCol) == False):
 			self.x = -1 
@@ -137,7 +145,7 @@ class Node(object):
 			return True
 		return False
 
-
+	# action to move up right  and check the cost between the new node and existing node and update the cost after comparison	
 	def moveUpRight(self, currRow, currCol):
 		if(self.validClearance(currRow+1, currCol+1) and self.obstacle(currRow +1, currCol + 1) == False):
 			self.x = 1
@@ -146,7 +154,7 @@ class Node(object):
 			return True
 		else:
 			return False
-
+    # action to move down right  and check the cost between the new node and existing node and update the cost after comparison
 	def moveDownRight(self, currRow, currCol):
 		if(self.validClearance(currRow+1, currCol-1) and self.obstacle(currRow + 1, currCol - 1) == False):
 			self.x = 1 
@@ -156,6 +164,7 @@ class Node(object):
 		else:
 			return False
 	
+	# action to move up left  and check the cost between the new node and existing node and update the cost after comparison
 	def moveUpLeft(self, currRow, currCol):
 		if(self.validClearance(currRow - 1, currCol+1) and self.obstacle(currRow - 1, currCol + 1) == False):
 			self.x = -1 
@@ -164,7 +173,7 @@ class Node(object):
 			return True
 		else:
 			return False
-
+    # action to move down left  and check the cost between the new node and existing node and update the cost after comparison
 	def moveDownLeft(self, currRow, currCol):
 		if(self.validClearance(currRow - 1, currCol - 1) and self.obstacle(currRow - 1, currCol - 1) == False):
 			self.x = -1 
@@ -177,7 +186,7 @@ class Node(object):
 	
 
 	
-
+    #check if the goal is reached 
 	def goalReached(self,currRow, currCol):
 		if(currRow== self.goal[0] and currCol == self.goal[1]):
 			print("Goal Reached")
@@ -185,24 +194,30 @@ class Node(object):
 		else:
 			return False
 
-
+	#main dijkastra algorithm
 	def Dij(self):
+
+		#define the cost map, visited nodes and path directories
 		costMap = {}
 		visited_nodes = {}
 		path = {}
 
+		#check the costmap , visited nodes and updated it
 		for row in np.arange(1, self.numRows + 1, 1):
 			for col in np.arange(1, self.numCols + 1, 1): 
 				costMap[(row, col)] = float('inf')
 				visited_nodes[(row, col)] = False
 				path[(row, col)] = -1
 
+		#define the list for explored nodes and queue		
 		explored_nodes = []
 		queue = []
 
+		# use heappush to push the nodes in the queue
 		heappush(queue, (0, self.start))
 		costMap[self.start] = 0
 
+		#if queue is greater than zero then check current node find the minimal cost and update the node with minimal cost 
 		while(len(queue)) > 0:
 			heapify(queue)
 			_, currNode = heappop(queue)
@@ -253,16 +268,17 @@ class Node(object):
 				path[(currNode[0] + self.x, currNode[1] + self.y)] = currNode
 				heappush(queue,(costMap[(currNode[0] + self.x, currNode[1] + self.y)], (currNode[0] + self.x, currNode[1] + self.y)))
 
-
+		#define the check list and goal nodes
 		check = []
 		goalx = self.goal[0]
 		goaly = self.goal[1]
 
+		#check the cost map until the goal node and append it 
 		for a in np.arange(goalx - 1, goalx + 1, 1):
 			for b in np.arange(goaly - 1, goaly + 1, 1):
 				check.append(costMap[a,b])
 
-
+		# if path exists print path 
 		ans = float('inf')
 		for c in range(len(check)):
 			if(check[c] != ans):
@@ -277,7 +293,7 @@ class Node(object):
 		print(costMap[goalx, goaly], "answer")
 		result = (goalx, goaly)
 
-
+		#backtrack the explored nodes and show the path
 		backtrack = []
 		node = result
 		while(path[node] != -1):
@@ -293,7 +309,7 @@ class Node(object):
 
 
 
-
+	# visualization	
 	def animation(self, explored_nodes, backtrack, path):
 		fourcc = cv2.VideoWriter_fourcc(*'XVID')
 		out = cv2.VideoWriter(str(path), fourcc, 20.0, (self.numCols, self.numRows))
